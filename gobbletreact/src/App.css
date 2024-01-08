@@ -1,0 +1,139 @@
+/* GameBoard.css */
+
+.mainpage {
+}
+
+.game-board {
+}
+
+.playerstacks{
+
+}
+
+.grid {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.grid-row {
+  display: flex;
+}
+
+.grid-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #000;
+    height: 10vh;
+    margin: -1px;
+    aspect-ratio: 1; /* Maintain a square aspect ratio */
+}
+
+.player1stack {
+    position: absolute;
+    left: 25%; /* Adjust the left positioning as needed */
+    top: 95%;
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+.player1stack1 {
+    position: absolute;
+    left: 50%; /* Adjust the left positioning as needed */
+    top: 95%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+
+.player1stack2 {
+    position: absolute;
+    left: 75%; /* Adjust the left positioning as needed */
+    top: 95%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+.player2stack {
+    position: absolute;
+    left: 25%; /* Adjust the left positioning as needed */
+    top: 14%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+.player2stack1 {
+    position: absolute;
+    left: 50%; /* Adjust the left positioning as needed */
+    top: 14%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+
+.player2stack2 {
+    position: absolute;
+    left: 75%; /* Adjust the left positioning as needed */
+    top: 14%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+.cup {
+    width: 10vw; /* Initial width, adjust as needed */
+    height: 10vh; /* Initial height, adjust as needed */
+    border-radius: 50%;
+    background-color: #3498db;
+    z-index: 4;
+    cursor: pointer; /* Add cursor:pointer to indicate it's clickable */
+    transition: transform 0.3s ease-in-out;
+}
+
+.cup-0 {
+    width: 9vh; /* Initial width, adjust as needed */
+    height: 9vh; /* Initial height, adjust as needed */
+    border: 1px solid #000;
+    border-radius: 50%; /* Make the cup circular */
+    z-index: 3;
+}
+
+.cup-1 {
+    width: 8vh; /* Initial width, adjust as needed */
+    height: 8vh; /* Initial height, adjust as needed */
+    border: 1px solid #000;
+    border-radius: 50%; /* Make the cup circular */
+    background-color: #3498db; /* Set a solid color, adjust the color code as needed */
+    z-index: 2;
+}
+
+.cup-2 {
+    width: 7vh; /* Initial width, adjust as needed */
+    height: 7vh; /* Initial height, adjust as needed */
+    border: 1px solid #000;
+    border-radius: 50%; /* Make the cup circular */
+    background-color: #3498db; /* Set a solid color, adjust the color code as needed */
+    z-index: 1;
+}
+
+.cup-3 {
+    width: 6vh; /* Initial width, adjust as needed */
+    height: 6vh; /* Initial height, adjust as needed */
+    border: 1px solid #000;
+    border-radius: 50%; /* Make the cup circular */
+    background-color: #3498db; /* Set a solid color, adjust the color code as needed */
+    z-index: 0;
+}
+
+
+.selected-cup {
+    border: 2px solid blue;
+    background-color: lightblue; /* Example style, adjust as needed */
+}
