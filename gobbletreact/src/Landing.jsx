@@ -11,9 +11,18 @@ document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}
 
 
 const Landing = ({ onLocalMultiplayer }) => {
+    // URL to the PDF file containing the game rules
+    const rulesPdfUrl = 'https://www.boardspace.net/gobblet/english/gobblet_rules.pdf'; // Replace with your actual URL
+
+    // Function to open the PDF in a new tab
+    const openRulesPdf = () => {
+        window.open(rulesPdfUrl, '_blank');
+    };
+
     return (
         <div className="landing-screen">
             <img src={Logo} alt="Gobblet" /> {/* Image added here */}
+            <button onClick={openRulesPdf}>Game Rules</button> {/* Button for game rules */}
             <button onClick={onLocalMultiplayer}>Local Multiplayer</button>
             <button onClick={onLocalMultiplayer}>Create/Join Room</button>
         </div>
