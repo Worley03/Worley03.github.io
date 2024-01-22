@@ -1,0 +1,33 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+.landing-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Take up the full viewport height */
+    text-align: center;
+    min-height: calc(var(--vh, 1vh) * 100);
+    margin: 0;
+    padding: 20px; /* Adjust as needed */
+    /* other styles */
+}
+
+    .landing-screen img {
+        max-width: 90%; /* Adjust this as needed */
+        width: 75vw; /* Adjust this for responsiveness */
+    }
+
+    .landing-screen button {
+        margin: 20px;
+        padding: 10px 20px;
+        font-size: 24px;
+        cursor: pointer;
+    }
