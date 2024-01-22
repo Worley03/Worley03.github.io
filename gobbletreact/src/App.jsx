@@ -1,32 +1,117 @@
-// GameBoard.js
+// App.jsx (will be renamed to localmultiplayer.jsx)
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
-const GameBoard = () => {
-    const [selectedCup, setSelectedCup] = useState({ id: null, isSelected: false });
-    const [gridCells, setGridCells] = useState(Array(16).fill(null));
+const GameBoard = (props) => {
 
-    const handleCupClick = (cupId) => {
-        setSelectedCup({ id: cupId, isSelected: true });
+    const [selectedCup, setSelectedCup] = useState({ id: null, isSelected: false });
+    const [gridCells, setGridCells] = useState(Array(16).fill([])); // Each cell starts as an empty array
+    const [winner, setWinner] = useState(null);
+    const [currentPlayer, setCurrentPlayer] = useState('player1'); // Player 1 starts
+
+
+    const switchTurn = () => {
+        setCurrentPlayer(currentPlayer === 'player1' ? 'player2' : 'player1');
     };
 
+    useEffect(() => {
+        // Update winner state when a winning condition is detected
+        const winningPlayer = checkForWin(gridCells);
+        if (winningPlayer) {
+            setWinner(winningPlayer);
+        }
+    }, [gridCells]);
+
+    useEffect(() => {
+        if (winner) {
+            alert(`${winner} wins!`);
+            props.onReturnToLanding(); // Return to the landing page
+        }
+    }, [winner, props.onReturnToLanding]);
+
+
+    const handleCupClick = (cupId) => {
+        event.stopPropagation(); // Stop event from propagating to the global click listener
+
+        // Map currentPlayer to "White" or "Black"
+        const currentPlayerColor = currentPlayer === 'player1' ? 'White' : 'Black';
+
+        // Check if it's the current player's turn
+        if (cupId.includes(currentPlayer)) {
+            setSelectedCup({ id: cupId, isSelected: true });
+        } else {
+            alert(`It's ${currentPlayerColor}'s turn!`);
+        }
+    };
+
+  
+
+    useEffect(() => {
+        const handleGlobalClick = (event) => {
+            // Check if the click is outside of a grid cell or on an empty cell
+            if (!event.target.classList.contains('grid-cell') || !event.target.hasChildNodes()) {
+                setSelectedCup({ id: null, isSelected: false });
+            }
+        };
+
+        // Add global click event listener
+        document.addEventListener('click', handleGlobalClick);
+
+        // Cleanup
+        return () => {
+            document.removeEventListener('click', handleGlobalClick);
+        };
+    }, []);
 
     const handleGridCellClick = (cellIndex) => {
-        if (selectedCup.isSelected) {
-            const newGridCells = [...gridCells];
+        const clickedStack = gridCells[cellIndex];
+        event.stopPropagation(); // Stop event from propagating to the global click listener
 
-            // Check if the cup is already on the board and remove it from its current position
-            const currentCupIndex = newGridCells.findIndex(cup => cup === selectedCup.id);
-            if (currentCupIndex !== -1) {
-                newGridCells[currentCupIndex] = null;
+        // Allow the move only if it's the current player's turn
+        if (selectedCup.isSelected && selectedCup.id) {
+            const selectedCupSize = parseInt(selectedCup.id.split('-')[2]);
+            const isCupFromStartingStack = !gridCells.flat().includes(selectedCup.id);
+            const isCellEmpty = clickedStack.length === 0;
+            const isTopCupSmaller = !isCellEmpty && parseInt(clickedStack[clickedStack.length - 1].split('-')[2]) > selectedCupSize;
+
+            // If a cup is being moved from the starting stack, apply the special rule
+            if (isCupFromStartingStack) {
+                if (isCellEmpty || isTopCupSmaller) {
+                    if (isMoveValid(cellIndex, selectedCup, gridCells)) {
+                        // Proceed with the move from the starting stack
+                        const newGridCells = [...gridCells];
+                        newGridCells[cellIndex] = [...clickedStack, selectedCup.id];
+                        setGridCells(newGridCells);
+                        setSelectedCup({ id: null, isSelected: false });
+                        switchTurn();
+                    } else {
+                        // Invalid move from the starting stack
+                        alert("Invalid Move: There must be 3 in a row to gobble from your hand.");
+                    }
+                }
+            } else {
+                // Logic for moving a piece that's already on the board
+                if (isCellEmpty || isTopCupSmaller) {
+                    const newGridCells = gridCells.map((stack, index) => {
+                        if (index === cellIndex) {
+                            return [...stack, selectedCup.id];
+                        } else {
+                            return stack.filter(cupId => cupId !== selectedCup.id);
+                        }
+                    });
+                    setGridCells(newGridCells);
+                    setSelectedCup({ id: null, isSelected: false });
+                    switchTurn();
+                }
             }
-
-            // Place the selected cup in the new cell
-            newGridCells[cellIndex] = selectedCup.id;
-
-            setGridCells(newGridCells);
-            setSelectedCup({ id: null, isSelected: false }); // Reset selected cup
+        } else {
+            // No cup is selected, select the top cup from the clicked cell
+            console.log('Grid cell clicked:', cellIndex, 'Stack:', clickedStack);
+            if (clickedStack.length > 0) {
+                const topCupId = clickedStack[clickedStack.length - 1];
+                setSelectedCup({ id: topCupId, isSelected: true });
+            }
         }
     };
 
@@ -34,37 +119,243 @@ const GameBoard = () => {
         <div className="mainpage">
             <div className="game-board">
                 <div className="grid">
-                    {renderGrid(handleGridCellClick, gridCells)}
+                    {renderGrid(handleGridCellClick, gridCells, selectedCup)}
                 </div>
             </div>
             <div className="playerstacks">
                 {/* Player 1's Stacks */}
                 <div className="player1stack">
-                    {renderCupStack(4, 1, 1, handleCupClick, selectedCup)} {/* Player 1, Stack 1 */}
+                    {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
                 </div>
                 <div className="player1stack1">
-                    {renderCupStack(4, 1, 2, handleCupClick, selectedCup)} {/* Player 1, Stack 2 */}
+                    {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
                 </div>
                 <div className="player1stack2">
-                    {renderCupStack(4, 1, 3, handleCupClick, selectedCup)} {/* Player 1, Stack 3 */}
+                    {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
                 </div>
 
                 {/* Player 2's Stacks */}
                 <div className="player2stack">
-                    {renderCupStack(4, 2, 1, handleCupClick, selectedCup)} {/* Player 2, Stack 1 */}
+                    {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
                 </div>
                 <div className="player2stack1">
-                    {renderCupStack(4, 2, 2, handleCupClick, selectedCup)} {/* Player 2, Stack 2 */}
+                    {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
                 </div>
                 <div className="player2stack2">
-                    {renderCupStack(4, 2, 3, handleCupClick, selectedCup)} {/* Player 2, Stack 3 */}
+                    {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
                 </div>
             </div>
         </div>
     );
 };
 
-const renderGrid = (handleGridCellClick, gridCells) => {
+const checkForWin = (gridCells) => {
+    // Check each row
+    for (let row = 0; row < boardSize; row++) {
+        if (checkLineForWin(gridCells, row * boardSize, 1)) {
+            return checkLineForWin(gridCells, row * boardSize, 1);
+        }
+    }
+
+    // Check each column
+    for (let col = 0; col < boardSize; col++) {
+        if (checkLineForWin(gridCells, col, boardSize)) {
+            return checkLineForWin(gridCells, col, boardSize);
+        }
+    }
+
+    // Check diagonals
+    if (checkLineForWin(gridCells, 0, boardSize + 1)) { // Top-left to bottom-right
+        return checkLineForWin(gridCells, 0, boardSize + 1);
+    }
+    if (checkLineForWin(gridCells, boardSize - 1, boardSize - 1)) { // Top-right to bottom-left
+        return checkLineForWin(gridCells, boardSize - 1, boardSize - 1);
+    }
+
+    return null; // No win detected
+};
+
+const checkLineForWin = (gridCells, startIndex, step) => {
+    let player1Count = 0;
+    let player2Count = 0;
+
+    for (let i = 0; i < boardSize; i++) {
+        const cell = gridCells[startIndex + i * step];
+        if (cell.length > 0) {
+            const topPiece = cell[cell.length - 1];
+            if (topPiece.includes('player1')) {
+                player1Count++;
+                player2Count = 0;
+            } else if (topPiece.includes('player2')) {
+                player2Count++;
+                player1Count = 0;
+            } else {
+                player1Count = 0;
+                player2Count = 0;
+            }
+
+            if (player1Count === 4) return 'White';
+            if (player2Count === 4) return 'Black';
+        } else {
+            player1Count = 0;
+            player2Count = 0;
+        }
+    }
+
+    return null; // No win in this line
+};
+
+
+const isMoveValid = (cellIndex, selectedCup, gridCells) => {
+    const topPiece = gridCells[cellIndex].length > 0 ? gridCells[cellIndex][gridCells[cellIndex].length - 1] : null;
+    const currentPlayer = selectedCup.id.includes('player1') ? 'player1' : 'player2';
+
+    if (topPiece) {
+        // Player 1's specific rule
+        if (currentPlayer === 'player1' && topPiece.includes('player2')) {
+            const playerTwoRows = checkForPlayerTwoRows(gridCells);
+            if (!playerTwoRows.includes(cellIndex)) {
+                return false; // Player 1 cannot cover Player 2's piece unless blocking a win
+            }
+        }
+
+        // Player 2's specific rule (assuming similar logic)
+        if (currentPlayer === 'player2' && topPiece.includes('player1')) {
+            // Define and call a similar function for Player 2, if needed
+            const playerOneRows = checkForPlayerOneRows(gridCells);
+            if (!playerOneRows.includes(cellIndex)) {
+                return false; // Player 2's specific rule
+            }
+        }
+    }
+
+    // If the cell is empty, or the move is valid according to the rules, allow the move
+    return true;
+};
+
+
+const boardSize = 4; // Assuming a 4x4 board
+
+const checkForPlayerTwoRows = (gridCells) => {
+    const winningPositions = [];
+
+    // Check rows
+    for (let row = 0; row < boardSize; row++) {
+        let playerTwoCount = 0;
+        for (let col = 0; col < boardSize; col++) {
+            const cell = gridCells[row * boardSize + col];
+            if (cell.some(cupId => cupId.includes('player2'))) {
+                playerTwoCount++;
+            }
+        }
+        if (playerTwoCount >= 3) {
+            for (let col = 0; col < boardSize; col++) {
+                winningPositions.push(row * boardSize + col);
+            }
+        }
+    }
+
+    // Check columns
+    for (let col = 0; col < boardSize; col++) {
+        let playerTwoCount = 0;
+        for (let row = 0; row < boardSize; row++) {
+            const cell = gridCells[row * boardSize + col];
+            if (cell.some(cupId => cupId.includes('player2'))) {
+                playerTwoCount++;
+            }
+        }
+        if (playerTwoCount >= 3) {
+            for (let row = 0; row < boardSize; row++) {
+                winningPositions.push(row * boardSize + col);
+            }
+        }
+    }
+
+    // Check diagonals
+    const diagonals = [
+        [0, 5, 10, 15], // Top-left to bottom-right
+        [3, 6, 9, 12]   // Top-right to bottom-left
+    ];
+
+    diagonals.forEach((diagonal) => {
+        let playerTwoCount = 0;
+        diagonal.forEach(index => {
+            const cell = gridCells[index];
+            if (cell.some(cupId => cupId.includes('player2'))) {
+                playerTwoCount++;
+            }
+        });
+        if (playerTwoCount >= 3) {
+            diagonal.forEach(index => {
+                winningPositions.push(index);
+            });
+        }
+    });
+
+    return winningPositions;
+};
+
+const checkForPlayerOneRows = (gridCells) => {
+    const winningPositions = [];
+
+    // Check rows
+    for (let row = 0; row < boardSize; row++) {
+        let playerOneCount = 0;
+        for (let col = 0; col < boardSize; col++) {
+            const cell = gridCells[row * boardSize + col];
+            if (cell.some(cupId => cupId.includes('player1'))) {
+                playerOneCount++;
+            }
+        }
+        if (playerOneCount >= 3) {
+            for (let col = 0; col < boardSize; col++) {
+                winningPositions.push(row * boardSize + col);
+            }
+        }
+    }
+
+    // Check columns
+    for (let col = 0; col < boardSize; col++) {
+        let playerOneCount = 0;
+        for (let row = 0; row < boardSize; row++) {
+            const cell = gridCells[row * boardSize + col];
+            if (cell.some(cupId => cupId.includes('player1'))) {
+                playerOneCount++;
+            }
+        }
+        if (playerOneCount >= 3) {
+            for (let row = 0; row < boardSize; row++) {
+                winningPositions.push(row * boardSize + col);
+            }
+        }
+    }
+
+    // Check diagonals
+    const diagonals = [
+        [0, 5, 10, 15], // Top-left to bottom-right
+        [3, 6, 9, 12]   // Top-right to bottom-left
+    ];
+
+    diagonals.forEach((diagonal) => {
+        let playerOneCount = 0;
+        diagonal.forEach(index => {
+            const cell = gridCells[index];
+            if (cell.some(cupId => cupId.includes('player1'))) {
+                playerOneCount++;
+            }
+        });
+        if (playerOneCount >= 3) {
+            diagonal.forEach(index => {
+                winningPositions.push(index);
+            });
+        }
+    });
+
+    return winningPositions;
+};
+
+
+const renderGrid = (handleGridCellClick, gridCells, selectedCup) => {
     if (!gridCells || gridCells.length !== 16) {
         return null; // or handle the error appropriately
     }
@@ -74,52 +365,68 @@ const renderGrid = (handleGridCellClick, gridCells) => {
         const cells = [];
         for (let j = 0; j < 4; j++) {
             const cellIndex = i * 4 + j;
-            const cupId = gridCells[cellIndex];
-
-            // Extracting the size information from the cupId
-            // Assuming cupId is something like 'player1-stack2-cup0'
-            const cupSize = cupId ? cupId.split('-').pop() : null;
+            const stack = gridCells[cellIndex];
 
             cells.push(
                 <div
                     key={cellIndex}
                     className="grid-cell"
-                    onClick={() => handleGridCellClick(cellIndex)}
+                    onClick={(e) => handleGridCellClick(cellIndex, e)}
                 >
-                    {cupSize && (
-                        <div className={`cup cup-${cupSize}`}>
-                            {/* Add any cup content or styling as needed */}
-                        </div>
-                    )}
+                    {stack.map(cupId => {
+                        // Determine the player based on the cupId
+                        const playerClass = cupId.includes('player1') ? 'player1' : 'player2';
+                        const isSelected = selectedCup.id === cupId && selectedCup.isSelected;
+                        const cupSizeClass = `cup-${cupId.split('-').pop()}`;
+
+                        return (
+                            <div
+                                key={cupId}
+                                className={`cup ${playerClass} ${cupSizeClass} ${isSelected ? 'selected-cup' : ''}`}
+                            >
+                                {/* Cup content */}
+                            </div>
+                        );
+                    })}
                 </div>
             );
         }
         rows.push(<div key={i} className="grid-row">{cells}</div>);
+
     }
+
     return rows;
 };
 
 
 
 
-const renderCupStack = (stackSize, playerNumber, stackNumber, handleCupClick, selectedCup) => {
+const renderCupStack = (stackSize, playerNumber, stackNumber, handleCupClick, selectedCup, gridCells) => {
     const cups = [];
     for (let i = 0; i < stackSize; i++) {
-        const cupId = `player${playerNumber}-stack${stackNumber}-${i}`; // cup size info as ${i}
-        const isSelected = selectedCup && selectedCup.id === cupId && selectedCup.isSelected;
-        cups.push(
-            <div
-                key={cupId}
-                id={cupId}
-                className={`cup cup-${i} ${isSelected ? 'selected-cup' : ''}`}
-                onClick={() => handleCupClick(cupId)}
-            >
-                {/* Add any cup content or styling as needed */}
-            </div>
-        );
+        const cupId = `player${playerNumber}-stack${stackNumber}-${i}`;
+        const cupClass = `cup player${playerNumber}`;
+
+        // Check if the cup is on the board
+        const isOnBoard = gridCells.some(cellStack => cellStack.includes(cupId));
+
+        if (!isOnBoard) {
+            const isSelected = selectedCup.id === cupId && selectedCup.isSelected;
+            cups.push(
+                <div
+                    key={cupId}
+                    id={cupId}
+                    className={`${cupClass} cup-${i} ${isSelected ? 'selected-cup' : ''}`}
+                    onClick={(e) => handleCupClick(cupId, e)}
+                >
+                    {/* Cup content */}
+                </div>
+            );
+        }
     }
     return cups;
 };
+
 
 
 export default GameBoard;
