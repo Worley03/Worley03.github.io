@@ -10,6 +10,32 @@
 
 }
 
+/* Add this to your App.css */
+.turn-indicator {
+    height: 3vh;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    aspect-ratio: 1; /* Maintain a square aspect ratio */
+}
+
+.player1-indicator {
+    background-color: #ccc; /* Adjust as needed to position below the grid */
+    position: absolute;
+    bottom: 22%;
+    display: flex;
+    align-items: center;
+}
+
+.player2-indicator {
+    background-color: #ccc; /* Adjust as needed to position below the grid */
+    position: absolute;
+    top: 22%;
+    display: flex;
+    align-items: center;
+}
+
 .grid {
     position: absolute;
     top: 50%;

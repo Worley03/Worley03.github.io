@@ -1,22 +1,13 @@
-// App.jsx (will be renamed to localmultiplayer.jsx)
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const GameBoard = (props) => {
-
     const [selectedCup, setSelectedCup] = useState({ id: null, isSelected: false });
-    const [gridCells, setGridCells] = useState(Array(16).fill([])); // Each cell starts as an empty array
+    const [gridCells, setGridCells] = useState(Array(16).fill([]));
     const [winner, setWinner] = useState(null);
-    const [currentPlayer, setCurrentPlayer] = useState('player1'); // Player 1 starts
-
-
-    const switchTurn = () => {
-        setCurrentPlayer(currentPlayer === 'player1' ? 'player2' : 'player1');
-    };
+    const [currentPlayer, setCurrentPlayer] = useState('player1');
 
     useEffect(() => {
-        // Update winner state when a winning condition is detected
         const winningPlayer = checkForWin(gridCells);
         if (winningPlayer) {
             setWinner(winningPlayer);
@@ -25,49 +16,38 @@ const GameBoard = (props) => {
 
     useEffect(() => {
         if (winner) {
-            alert(`${winner} wins!`);
-            props.onReturnToLanding(); // Return to the landing page
+            setTimeout(() => {
+                alert(`${winner} wins!`);
+                props.onReturnToLanding();
+            }, 0);
         }
     }, [winner, props.onReturnToLanding]);
 
-
-    const handleCupClick = (cupId) => {
-        event.stopPropagation(); // Stop event from propagating to the global click listener
-
-        // Map currentPlayer to "White" or "Black"
-        const currentPlayerColor = currentPlayer === 'player1' ? 'White' : 'Black';
-
-        // Check if it's the current player's turn
+    const handleCupClick = (cupId, event) => {
+        event.stopPropagation();
         if (cupId.includes(currentPlayer)) {
             setSelectedCup({ id: cupId, isSelected: true });
         } else {
-            alert(`It's ${currentPlayerColor}'s turn!`);
+            alert(`It's not your turn!`);
         }
     };
 
-  
-
     useEffect(() => {
         const handleGlobalClick = (event) => {
-            // Check if the click is outside of a grid cell or on an empty cell
             if (!event.target.classList.contains('grid-cell') || !event.target.hasChildNodes()) {
                 setSelectedCup({ id: null, isSelected: false });
             }
         };
 
-        // Add global click event listener
         document.addEventListener('click', handleGlobalClick);
-
-        // Cleanup
         return () => {
             document.removeEventListener('click', handleGlobalClick);
         };
     }, []);
 
-    const handleGridCellClick = (cellIndex) => {
+    const handleGridCellClick = (cellIndex, event) => {
+        event.stopPropagation();
         const clickedStack = gridCells[cellIndex];
-        event.stopPropagation(); // Stop event from propagating to the global click listener
-
         // Allow the move only if it's the current player's turn
         if (selectedCup.isSelected && selectedCup.id) {
             const selectedCupSize = parseInt(selectedCup.id.split('-')[2]);
@@ -115,8 +95,19 @@ const GameBoard = (props) => {
         }
     };
 
+    const switchTurn = () => {
+        setCurrentPlayer(currentPlayer === 'player1' ? 'player2' : 'player1');
+
+    };
+
     return (
         <div className="mainpage">
+            {currentPlayer === 'player1' && (
+                <div className="turn-indicator player1-indicator" />
+            )}
+            {currentPlayer === 'player2' && (
+                <div className="turn-indicator player2-indicator" />
+            )}
             <div className="game-board">
                 <div className="grid">
                     {renderGrid(handleGridCellClick, gridCells, selectedCup)}
