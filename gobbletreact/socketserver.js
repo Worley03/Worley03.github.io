@@ -10,7 +10,7 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = new socketIo.Server(httpServer, {
     cors: {
-        origin: "http://localhost:5173", // Your client's URL
+        origin: "*", // Your client's URL
         methods: ["GET", "POST"]
     }
 });
@@ -72,6 +72,6 @@ io.on('connection', (socket) => {
 });
 
 // Start the HTTP server, not the Express app
-httpServer.listen(3000, () => {
+httpServer.listen(3000, '192.168.7.250', () => {
     console.log('Server is running on port 3000');
 });
