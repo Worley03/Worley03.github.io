@@ -28,6 +28,7 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
         };
 
         const handleMoveMade = (data) => {
+            console.log(`${data} recieved`);
             setGridCells(data.newGridCells);
             setCurrentPlayer(data.nextTurn);
         };
@@ -85,7 +86,7 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                             setGridCells(newGridCells);
                             //emit for SOCKET.io
                             setSelectedCup({ id: null, isSelected: false });
-                            switchTurn();
+                            //switchTurn();
                             const moveData = {
                                 room: roomCode, // Use the room code from props
                                 cellIndex: cellIndex,
@@ -93,6 +94,8 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                             };
 
                             socket.emit('makeMove', moveData);
+                            console.log(`${moveData}`);
+
 
                         } else {
                             // Invalid move from the starting stack
@@ -112,7 +115,7 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                         setGridCells(newGridCells);
                         //emit for SOCKET.io
                         setSelectedCup({ id: null, isSelected: false });
-                        switchTurn();
+                        //switchTurn();
                         const moveData = {
                             room: roomCode, // Use the room code from props
                             cellIndex: cellIndex,
@@ -131,11 +134,6 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                 }
             }
         }
-    };
-
-    const switchTurn = () => {
-        setCurrentPlayer(currentPlayer === 'player1' ? 'player2' : 'player1');
-
     };
 
     const handleLeaveRoom = () => {
@@ -176,14 +174,14 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                 </div>
             )}
             {currentPlayer !== playerRole && currentPlayer === 'player2' && (
-                <div className="typing-indicator1">
+                <div className="typing-indicator2">
                     <div className="dot"></div>
                     <div className="dot"></div>
                     <div className="dot"></div>
                 </div>
             )}
             {currentPlayer !== playerRole && currentPlayer === 'player1' && (
-                <div className="typing-indicator2">
+                <div className="typing-indicator1">
                     <div className="dot"></div>
                     <div className="dot"></div>
                     <div className="dot"></div>
