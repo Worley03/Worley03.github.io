@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './App.css';
 import socket from './socket.js';
 
@@ -136,18 +137,18 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
         }
     };
 
-    const handleLeaveRoom = () => {
-        socket.emit('leaveRoom', roomCode);
-        // Additional logic for redirecting the user, updating UI, etc.
-    };
 
     useEffect(() => {
+        const handleLeaveRoom = () => {
+            socket.emit('leaveRoom', roomCode);
+            // Additional logic for redirecting the user, updating UI, etc.
+        };
         const winningPlayer = checkForWin(gridCells);
         if (winningPlayer) {
             setWinner(winningPlayer);
             handleLeaveRoom();
         }
-    }, [gridCells]);
+    }, [gridCells, roomCode]);
 
     useEffect(() => {
         if (winner) {
@@ -217,6 +218,11 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
             </div>
         </div>
     );
+};
+
+GameBoard.propTypes = {
+    roomCode: PropTypes.string.isRequired,
+    onReturnToLanding: PropTypes.func.isRequired
 };
 
 const checkForWin = (gridCells) => {
