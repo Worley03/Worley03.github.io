@@ -63,8 +63,10 @@ const GameBoard = (props) => {
                         const newGridCells = [...gridCells];
                         newGridCells[cellIndex] = [...clickedStack, selectedCup.id];
                         setGridCells(newGridCells);
+                        //emit for SOCKET.io
                         setSelectedCup({ id: null, isSelected: false });
                         switchTurn();
+                        //emit for SOCKET.io
                     } else {
                         // Invalid move from the starting stack
                         alert("Invalid Move: There must be 3 in a row to gobble from your hand.");
@@ -81,8 +83,10 @@ const GameBoard = (props) => {
                         }
                     });
                     setGridCells(newGridCells);
+                    //emit for SOCKET.io
                     setSelectedCup({ id: null, isSelected: false });
                     switchTurn();
+                    //emit for SOCKET.io
                 }
             }
         } else {
