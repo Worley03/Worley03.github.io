@@ -2,9 +2,13 @@ import express from 'express';
 import http from 'http';
 import * as socketIo from 'socket.io';
 
-let currentTurn = 'player1'; // Initialize the turn to Player 1
+//let currentTurn = 'player1'; // Initialize the turn to Player 1
 let roomStates = {}; // Keeps track of the state of each room
 
+function resetRoomState(roomId) {
+    roomStates[roomId] = { players: [], currentPlayer: 'player1', currentTurn: 'player1' };
+    // Any other initial state settings as needed
+}
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -16,8 +20,7 @@ const io = new socketIo.Server(httpServer, {
 });
 
 io.on('connection', (socket) => {
-    console.log('New client connected');
-
+    console.log(`User with socket ID ${socket.id} connected`);
     socket.on('checkRoom', (room, callback) => {
         const roomSize = io.sockets.adapter.rooms.get(room)?.size || 0;
         const isFull = roomSize >= 2;
@@ -30,7 +33,6 @@ io.on('connection', (socket) => {
 
         if (roomSize < 2) {
             socket.join(room);
-            console.log(`User joined room: ${room}`);
             // Handle joining room logic here
             // Assign player role
             let playerRole = roomSize === 0 ? 'player1' : 'player2';
@@ -54,31 +56,62 @@ io.on('connection', (socket) => {
 
     socket.on('makeMove', (data) => {
         const roomState = roomStates[data.room];
-        // Process the move and determine the next turn
-        if (socket.id === roomState.players[roomState.currentPlayer === 'player1' ? 0 : 1]) {
-            currentTurn = currentTurn === 'player1' ? 'player2' : 'player1';
-            roomState.currentPlayer = roomState.currentPlayer === 'player1' ? 'player2' : 'player1';
+
+        if (socket.id === roomState.players[roomState.currentTurn === 'player1' ? 0 : 1]) {
+            roomState.currentTurn = roomState.currentTurn === 'player1' ? 'player2' : 'player1';
+            roomState.currentPlayer = roomState.currentTurn;
             io.to(data.room).emit('moveMade', {
                 newGridCells: data.newGridCells,
-                nextTurn: currentTurn
+                nextTurn: roomState.currentTurn
             });
         }
+        console.log(`${data}`);
     });
 
     socket.on('leaveRoom', (room) => {
-        console.log('player left')
+        const roomSize = io.sockets.adapter.rooms.get(room)?.size || 0;
+        console.log(`User with socket ID ${socket.id} left ${room}`);
         socket.leave(room);
-        // Additional logic for notifying other player, updating room state, etc.
+        console.log(`Room size ${roomSize}`);
+
+
+        // Remove the player from the room state
+        if (roomStates[room]) {
+            const index = roomStates[room].players.indexOf(socket.id);
+            if (index !== -1) {
+                roomStates[room].players.splice(index, 1);
+            }
+
+            // Reset the room if it's empty or under certain conditions
+            if (roomStates[room].players.length === 0) {
+                resetRoomState(room);
+                console.log(`${room} reset`);
+            }
+        }
     });
 
 
     socket.on('disconnect', () => {
-        console.log('Client disconnected');
-        // Handle disconnect logic here
+        console.log(`User with socket ID ${socket.id} disconnected`);
+        for (const [room, state] of Object.entries(roomStates)) {
+            const playerIndex = state.players.indexOf(socket.id);
+            if (playerIndex !== -1) {
+                state.players.splice(playerIndex, 1);
+                // Reset or update the room as necessary
+                if (state.players.length === 0) {
+                    resetRoomState(room);
+                    console.log(`${room} reset`);
+                } else {
+                    // Additional logic if other players are still in the room
+                }
+
+                break; // Stop searching once the player's room is found
+            }
+        }
     });
 });
 
 // Start the HTTP server, not the Express app
-httpServer.listen(3000, '192.168.7.250', () => {
+httpServer.listen(3000, '192.168.68.131', () => {
     console.log('Server is running on port 3000');
 });
