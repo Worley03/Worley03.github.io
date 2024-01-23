@@ -65,6 +65,13 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('leaveRoom', (room) => {
+        console.log('player left')
+        socket.leave(room);
+        // Additional logic for notifying other player, updating room state, etc.
+    });
+
+
     socket.on('disconnect', () => {
         console.log('Client disconnected');
         // Handle disconnect logic here

@@ -7,13 +7,13 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
     const [gridCells, setGridCells] = useState(Array(16).fill([]));
     const [winner, setWinner] = useState(null);
     const [currentPlayer, setCurrentPlayer] = useState('player1');
-    const [gameStarted, setGameStarted] = useState(true);
+    const [gameStarted, setGameStarted] = useState(null);
     const [playerRole, setPlayerRole] = useState(null);
 
     useEffect(() => {
         console.log(`Joining server`);
         socket.emit('joinRoom', roomCode);
-    }, []); // Empty dependency array to run only once
+    }, [roomCode]);
 
     useEffect(() => {
         const handleRoleAssigned = (role) => {
@@ -44,29 +44,10 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
         };
     }, [roomCode]); // Runs only when roomCode changes
 
-
-    useEffect(() => {
-        const winningPlayer = checkForWin(gridCells);
-        if (winningPlayer) {
-            setWinner(winningPlayer);
-        }
-    }, [gridCells]);
-
-    useEffect(() => {
-        if (winner) {
-            setTimeout(() => {
-                alert(`${winner} wins!`);
-                onReturnToLanding();
-            }, 0);
-        }
-    }, [winner, onReturnToLanding]);
-
     const handleCupClick = (cupId, event) => {
         event.stopPropagation();
         if (cupId.includes(currentPlayer)) {
             setSelectedCup({ id: cupId, isSelected: true });
-        } else {
-            alert(`It's not your turn!`);
         }
     };
 
@@ -157,13 +138,56 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
 
     };
 
+    const handleLeaveRoom = () => {
+        socket.emit('leaveRoom', roomCode);
+        // Additional logic for redirecting the user, updating UI, etc.
+    };
+
+    useEffect(() => {
+        const winningPlayer = checkForWin(gridCells);
+        if (winningPlayer) {
+            setWinner(winningPlayer);
+            handleLeaveRoom();
+        }
+    }, [gridCells]);
+
+    useEffect(() => {
+        if (winner) {
+            setTimeout(() => {
+                alert(`${winner} wins!`);
+                onReturnToLanding();
+            }, 0);
+        }
+    }, [winner, onReturnToLanding]);
+
     return (
         <div className="mainpage">
-            {currentPlayer === 'player1' && (
-                <div className="turn-indicator player1-indicator" />
+            {!gameStarted && (
+                <div className="waiting-message">
+                    Waiting for opponent...
+                </div>
+
             )}
-            {currentPlayer === 'player2' && (
-                <div className="turn-indicator player2-indicator" />
+            {!gameStarted && (
+                <div className="typing-indicator1">
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                </div>
+            )}
+            {currentPlayer !== playerRole && currentPlayer === 'player2' && (
+                <div className="typing-indicator1">
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                </div>
+            )}
+            {currentPlayer !== playerRole && currentPlayer === 'player1' && (
+                <div className="typing-indicator2">
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                </div>
             )}
             <div className="game-board">
                 <div className="grid">
