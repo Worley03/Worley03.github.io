@@ -150,17 +150,11 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
         }
     }, [gridCells, roomCode]);
 
-    useEffect(() => {
-        if (winner) {
-            setTimeout(() => {
-                alert(`${winner} wins!`);
-                onReturnToLanding();
-            }, 0);
-        }
-    }, [winner, onReturnToLanding]);
-
     return (
         <div className="mainpage">
+            {winner && (
+                <WinnerOverlay winner={winner} onReset={onReturnToLanding} />
+            )}
             {!gameStarted && (
                 <div className="waiting-message">
                     Waiting for opponent...
@@ -530,6 +524,24 @@ const renderCupStack = (stackSize, playerNumber, stackNumber, handleCupClick, se
     return cups;
 };
 
+
+const WinnerOverlay = ({ winner, onReset }) => {
+    return (
+        <div className="winner-overlay">
+            <div className="winner-message">
+                {winner} has won!
+            </div>
+            <button className="reset-button" onClick={onReset}>
+                Play Again
+            </button>
+        </div>
+    );
+};
+
+WinnerOverlay.propTypes = {
+    winner: PropTypes.string.isRequired,
+    onReset: PropTypes.func.isRequired
+};
 
 
 export default GameBoard;

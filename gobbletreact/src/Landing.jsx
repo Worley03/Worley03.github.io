@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './Landing.css'; // Assuming you have a separate CSS file for styling
 import Logo from './assets/gobblet.png'; // Adjust the path as necessary
 import socket from './socket.js';
@@ -25,6 +25,19 @@ const Landing = ({ onLocalMultiplayer, onOnlineMultiplayer }) => {
         });
     };
 
+    const handleBlur = () => {
+        document.body.style.zoom = 1.0;
+    };
+
+    const setViewportHeight = () => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    window.addEventListener('resize', setViewportHeight);
+    setViewportHeight(); // Call on initial load
+
+
     return (
         <div className="landing-screen">
             <img src={Logo} alt="Gobblet" />
@@ -39,6 +52,7 @@ const Landing = ({ onLocalMultiplayer, onOnlineMultiplayer }) => {
             <input
                 type="text"
                 value={roomCode}
+                onBlur={handleBlur}
                 onChange={handleRoomCodeChange}
                 placeholder={roomCode.trim() ? "" : "Enter Code"} // Conditional placeholder
             />

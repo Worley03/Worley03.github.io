@@ -1,4 +1,5 @@
 html, body {
+    height: 100%; /* Ensure they take up the full viewport height */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -12,22 +13,45 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh; /* Take up the full viewport height */
     text-align: center;
-    min-height: calc(var(--vh, 1vh) * 100);
+    height: 80vh;
     margin: 0;
-    padding: 20px; /* Adjust as needed */
     /* other styles */
 }
 
-    .landing-screen img {
-        max-width: 90%; /* Adjust this as needed */
-        width: 75vw; /* Adjust this for responsiveness */
-    }
+input {
+    font-size: 20px; /* Sets the font size to 20 pixels */
+    width: 75vw;
+    max-width: 300px;
+}
 
-    .landing-screen button {
-        margin: 20px;
-        padding: 10px 20px;
-        font-size: 24px;
-        cursor: pointer;
+.landing-screen img {
+    max-width: 90%; /* Adjust this as needed */
+    width: 90vw; /* Adjust this for responsiveness */
+}
+
+.landing-screen button {
+    width: 75vw;
+    margin: 20px;
+    padding: 10px 20px;
+    font-size: 24px;
+    cursor: pointer;
+    max-width: 300px;
+}
+
+@media screen and (min-width: 1000px) { /* Adjust breakpoint as needed */
+    .landing-screen {
+        height: 85vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 15px;
     }
+        .landing-screen img {
+        max-width: 90%; /* Adjust this as needed */
+        width: 90vw; /* Adjust this for responsiveness */
+        margin-bottom: -50px;
+    }
+}
