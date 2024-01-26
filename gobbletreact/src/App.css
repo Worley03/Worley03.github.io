@@ -181,6 +181,65 @@
     align-items: center;
 }
 
+
+
+.oplayer1stack {
+    position: absolute;
+    left: 25%; /* Adjust the left positioning as needed */
+    top: 14%;
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+.oplayer1stack1 {
+    position: absolute;
+    left: 50%; /* Adjust the left positioning as needed */
+    top: 14%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+
+.oplayer1stack2 {
+    position: absolute;
+    left: 75%; /* Adjust the left positioning as needed */
+    top: 14%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+.oplayer2stack {
+    position: absolute;
+    left: 25%; /* Adjust the left positioning as needed */
+    top: 86%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+.oplayer2stack1 {
+    position: absolute;
+    left: 50%; /* Adjust the left positioning as needed */
+    top: 86%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+
+.oplayer2stack2 {
+    position: absolute;
+    left: 75%; /* Adjust the left positioning as needed */
+    top: 86%; /* Center vertically */
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+}
+
+
 /* Specific styles for Player 1's cups (white) */
 .cup.player1 {
     background-color: #fff; /* White color */

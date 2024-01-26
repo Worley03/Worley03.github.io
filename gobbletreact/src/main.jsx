@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import Landing from './Landing.jsx';
 import LocalMultiplayer from './local.jsx'; // Import your LocalMultiplayer component

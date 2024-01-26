@@ -182,7 +182,7 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                 </div>
             )}
             {currentPlayer !== playerRole && currentPlayer === 'player1' && (
-                <div className="typing-indicator1">
+                <div className="typing-indicator2">
                     <div className="dot"></div>
                     <div className="dot"></div>
                     <div className="dot"></div>
@@ -193,29 +193,56 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                     {renderGrid(handleGridCellClick, gridCells, selectedCup)}
                 </div>
             </div>
-            <div className="playerstacks">
-                {/* Player 1's Stacks */}
-                <div className="player1stack">
-                    {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
-                </div>
-                <div className="player1stack1">
-                    {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
-                </div>
-                <div className="player1stack2">
-                    {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
-                </div>
+            {playerRole === 'player1' && (
+                <div className="playerstacks">
+                    {/* Player 1's Stacks */}
+                    <div className="player1stack">
+                        {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
+                    </div>
+                    <div className="player1stack1">
+                        {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
+                    </div>
+                    <div className="player1stack2">
+                        {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
+                    </div>
 
-                {/* Player 2's Stacks */}
-                <div className="player2stack">
-                    {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
+                    {/* Player 2's Stacks */}
+                    <div className="player2stack">
+                        {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
+                    </div>
+                    <div className="player2stack1">
+                        {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
+                    </div>
+                    <div className="player2stack2">
+                        {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
+                    </div>
                 </div>
-                <div className="player2stack1">
-                    {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
+            )}
+            {playerRole === 'player2' && (
+                <div className="playerstacks">
+                    {/* Player 1's Stacks */}
+                    <div className="oplayer1stack">
+                        {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
+                    </div>
+                    <div className="oplayer1stack1">
+                        {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
+                    </div>
+                    <div className="oplayer1stack2">
+                        {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
+                    </div>
+
+                    {/* Player 2's Stacks */}
+                    <div className="oplayer2stack">
+                        {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
+                    </div>
+                    <div className="oplayer2stack1">
+                        {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
+                    </div>
+                    <div className="oplayer2stack2">
+                        {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
+                    </div>
                 </div>
-                <div className="player2stack2">
-                    {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
-                </div>
-            </div>
+            )}
         </div>
     );
 };
