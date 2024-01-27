@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './App.css';
 
-const GameBoard = (props) => {
+const GameBoard = ({ onReturnToLanding }) => {
     const [selectedCup, setSelectedCup] = useState({ id: null, isSelected: false });
     const [gridCells, setGridCells] = useState(Array(16).fill([]));
     const [winner, setWinner] = useState(null);
@@ -13,15 +14,6 @@ const GameBoard = (props) => {
             setWinner(winningPlayer);
         }
     }, [gridCells]);
-
-    useEffect(() => {
-        if (winner) {
-            setTimeout(() => {
-                alert(`${winner} wins!`);
-                props.onReturnToLanding();
-            }, 0);
-        }
-    }, [winner, props.onReturnToLanding]);
 
     const handleCupClick = (cupId, event) => {
         event.stopPropagation();
@@ -106,6 +98,9 @@ const GameBoard = (props) => {
 
     return (
         <div className="mainpage">
+            {winner && (
+                <WinnerOverlay winner={winner} onReset={onReturnToLanding} />
+            )}
             {currentPlayer === 'player1' && (
                 <div className="turn-indicator player1-indicator" />
             )}
@@ -422,6 +417,26 @@ const renderCupStack = (stackSize, playerNumber, stackNumber, handleCupClick, se
     return cups;
 };
 
+const WinnerOverlay = ({ winner, onReset }) => {
+    return (
+        <div className="winner-overlay">
+            <div className="winner-message">
+                {winner} has won!
+            </div>
+            <button className="reset-button" onClick={onReset}>
+                Play Again
+            </button>
+        </div>
+    );
+};
 
+WinnerOverlay.propTypes = {
+    winner: PropTypes.string.isRequired,
+    onReset: PropTypes.func.isRequired
+};
+
+GameBoard.propTypes = {
+    onReturnToLanding: PropTypes.func.isRequired,
+};
 
 export default GameBoard;

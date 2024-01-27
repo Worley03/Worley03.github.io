@@ -152,6 +152,9 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
 
     return (
         <div className="mainpage">
+            <div className="roomcode">
+                Room Code: {roomCode}
+            </div>
             {winner && (
                 <WinnerOverlay winner={winner} onReset={onReturnToLanding} />
             )}
@@ -162,7 +165,7 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
 
             )}
             {!gameStarted && (
-                <div className="typing-indicator1">
+                <div className="typing-indicator2">
                     <div className="dot"></div>
                     <div className="dot"></div>
                     <div className="dot"></div>
