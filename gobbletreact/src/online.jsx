@@ -10,6 +10,27 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
     const [currentPlayer, setCurrentPlayer] = useState('player1');
     const [gameStarted, setGameStarted] = useState(null);
     const [playerRole, setPlayerRole] = useState(null);
+    const [opponentConnected, setOpponentConnected] = useState(false);
+
+    useEffect(() => {
+        const handleOpponentConnected = () => {
+            setOpponentConnected(true);
+        };
+
+        const handleOpponentDisconnected = () => {
+            setOpponentConnected(false);
+        };
+
+        socket.on('opponentConnected', handleOpponentConnected);
+        socket.on('opponentDisconnected', handleOpponentDisconnected);
+
+        // Cleanup function
+        return () => {
+            socket.off('opponentConnected', handleOpponentConnected);
+            socket.off('opponentDisconnected', handleOpponentDisconnected);
+        };
+    }, []); // Empty dependency array ensures this only runs once on mount
+
 
     useEffect(() => {
         console.log(`Joining server`);
@@ -152,6 +173,9 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
 
     return (
         <div className="mainpage">
+            <div className="mainpage">
+                <OpponentStatusIndicator isConnected={opponentConnected} />
+            </div>
             <div className="roomcode">
                 Room Code: {roomCode}
             </div>
@@ -243,6 +267,21 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
         </div>
     );
 };
+
+const OpponentStatusIndicator = ({ isConnected }) => (
+    <div
+        style={{
+            width: '10px',
+            height: '10px',
+            borderRadius: '50%',
+            backgroundColor: isConnected ? 'green' : 'red',
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+        }}
+        title={isConnected ? 'Opponent is connected' : 'Opponent is disconnected'}
+    />
+);
 
 GameBoard.propTypes = {
     roomCode: PropTypes.string.isRequired,
