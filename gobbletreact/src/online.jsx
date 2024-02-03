@@ -274,7 +274,7 @@ const OpponentStatusIndicator = ({ isConnected }) => (
             width: '10px',
             height: '10px',
             borderRadius: '50%',
-            backgroundColor: isConnected ? 'green' : 'red',
+            backgroundColor: isConnected ? '#00ff00' : '#ff0000',
             position: 'absolute',
             top: '10px',
             left: '10px',
@@ -282,6 +282,10 @@ const OpponentStatusIndicator = ({ isConnected }) => (
         title={isConnected ? 'Opponent is connected' : 'Opponent is disconnected'}
     />
 );
+
+OpponentStatusIndicator.propTypes = {
+    isConnected: PropTypes.string.isRequired,
+};
 
 GameBoard.propTypes = {
     roomCode: PropTypes.string.isRequired,
