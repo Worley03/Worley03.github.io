@@ -69,6 +69,9 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
 
     const handleCupClick = (cupId, event) => {
         event.stopPropagation();
+        if (currentPlayer !== playerRole) {
+            return;
+        }
         if (cupId.includes(currentPlayer)) {
             setSelectedCup({ id: cupId, isSelected: true });
         }
