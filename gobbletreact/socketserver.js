@@ -58,11 +58,6 @@ io.on('connection', (socket) => {
             console.log(`User with socket ID ${socket.id} joined room: ${room} as ${playerRole}`);
             socket.emit('roleAssigned', playerRole);
 
-            if (roomSize === 1) { // This means there is already one player in the room
-                // Emit to the other player in the room that their opponent has connected
-                socket.to(room).emit('opponentConnected');
-            }
-
         } else {
             // Send a message back to the client if the room is full
             socket.emit('roomFull', `Room ${room} is already full`);
@@ -73,6 +68,8 @@ io.on('connection', (socket) => {
             roomStates[room].players.push(socket.id);
             // Notify both players that the game can start when the second player joins
             if (roomStates[room].players.length === 2) {
+                socket.emit('opponentConnected');
+                socket.to(room).emit('opponentConnected');
                 io.to(room).emit('gameStart');
                 resetInactivityTimer(room);  // Reset inactivity timer
             }
@@ -111,8 +108,8 @@ io.on('connection', (socket) => {
                 // Notify the remaining player that their opponent has left
                 io.to(roomStates[room].players[0]).emit('opponentDisconnected');
             }
-            // Reset the room if it's empty or under certain conditions
-            if (roomStates[room].players.length === 0) {
+                // Reset the room if it's empty or under certain conditions
+            else if (roomStates[room].players.length === 0) {
                 resetRoomState(room);
                 console.log(`${room} reset`);
             }
@@ -127,11 +124,12 @@ io.on('connection', (socket) => {
             if (playerIndex !== -1) {
                 state.players.splice(playerIndex, 1);
                 // Reset or update the room as necessary
-                if (state.players.length === 0) {
+                if (state.players.length === 1) {
+                    // Notify the remaining player that their opponent has disconnected
+                    io.to(state.players[0]).emit('opponentDisconnected');
+                } else if (state.players.length === 0) {
                     resetRoomState(room);
                     console.log(`${room} reset`);
-                } else {
-                    // Additional logic if other players are still in the room
                 }
 
                 break; // Stop searching once the player's room is found
