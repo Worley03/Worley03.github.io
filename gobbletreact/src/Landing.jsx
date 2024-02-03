@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './Landing.css'; // Assuming you have a separate CSS file for styling
 import Logo from './assets/gobblet.png'; // Adjust the path as necessary
 import socket from './socket.js';
+import PropTypes from 'prop-types';
 
 const Landing = ({ onLocalMultiplayer, onOnlineMultiplayer }) => {
     const [roomCode, setRoomCode] = useState('');
@@ -59,5 +60,11 @@ const Landing = ({ onLocalMultiplayer, onOnlineMultiplayer }) => {
         </div>
     );
 };
+
+// Prop validation
+Landing.propTypes = {
+    onLocalMultiplayer: PropTypes.func.isRequired,
+    onOnlineMultiplayer: PropTypes.func.isRequired,
+  };
 
 export default Landing;
