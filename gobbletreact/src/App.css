@@ -1,16 +1,21 @@
-/* GameBoard.css */
+/* App.css */
 
-.mainpage {
+html, body {
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+    touch-action: none; /* Disable touch actions like pinch-zoom and pan */
+  }
+  
+
+.no-select {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Safari */
+    -khtml-user-select: none;    /* Konqueror HTML */
+    -moz-user-select: none;      /* Old versions of Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+    touch-action: none; /* This disables scrolling, zooming, or any touch action */  
 }
-
-.game-board {
-}
-
-.playerstacks{
-
-}
-
-
 
 /* Add this to your App.css */
 .turn-indicator {

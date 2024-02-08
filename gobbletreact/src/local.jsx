@@ -97,42 +97,44 @@ const GameBoard = ({ onReturnToLanding }) => {
     };
 
     return (
-        <div className="mainpage">
-            {winner && (
-                <WinnerOverlay winner={winner} onReset={onReturnToLanding} />
-            )}
-            {currentPlayer === 'player1' && (
-                <div className="turn-indicator player1-indicator" />
-            )}
-            {currentPlayer === 'player2' && (
-                <div className="turn-indicator player2-indicator" />
-            )}
-            <div className="game-board">
-                <div className="grid">
-                    {renderGrid(handleGridCellClick, gridCells, selectedCup)}
+        <div className="no-select">
+            <div className="mainpage">
+                {winner && (
+                    <WinnerOverlay winner={winner} onReset={onReturnToLanding} />
+                )}
+                {currentPlayer === 'player1' && (
+                    <div className="turn-indicator player1-indicator" />
+                )}
+                {currentPlayer === 'player2' && (
+                    <div className="turn-indicator player2-indicator" />
+                )}
+                <div className="game-board">
+                    <div className="grid">
+                        {renderGrid(handleGridCellClick, gridCells, selectedCup)}
+                    </div>
                 </div>
-            </div>
-            <div className="playerstacks">
-                {/* Player 1's Stacks */}
-                <div className="player1stack">
-                    {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
-                </div>
-                <div className="player1stack1">
-                    {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
-                </div>
-                <div className="player1stack2">
-                    {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
-                </div>
+                <div className="playerstacks">
+                    {/* Player 1's Stacks */}
+                    <div className="player1stack">
+                        {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
+                    </div>
+                    <div className="player1stack1">
+                        {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
+                    </div>
+                    <div className="player1stack2">
+                        {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
+                    </div>
 
-                {/* Player 2's Stacks */}
-                <div className="player2stack">
-                    {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
-                </div>
-                <div className="player2stack1">
-                    {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
-                </div>
-                <div className="player2stack2">
-                    {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
+                    {/* Player 2's Stacks */}
+                    <div className="player2stack">
+                        {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
+                    </div>
+                    <div className="player2stack1">
+                        {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
+                    </div>
+                    <div className="player2stack2">
+                        {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
+                    </div>
                 </div>
             </div>
         </div>

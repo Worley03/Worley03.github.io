@@ -175,98 +175,100 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
     }, [gridCells, roomCode]);
 
     return (
-        <div className="mainpage">
+        <div className="no-select">
             <div className="mainpage">
-                <OpponentStatusIndicator isConnected={opponentConnected} />
-            </div>
-            <div className="roomcode">
-                Room Code: {roomCode}
-            </div>
-            {winner && (
-                <WinnerOverlay winner={winner} onReset={onReturnToLanding} />
-            )}
-            {!gameStarted && (
-                <div className="waiting-message">
-                    Waiting for opponent...
+                <div className="indicator">
+                    <OpponentStatusIndicator isConnected={opponentConnected} />
                 </div>
-
-            )}
-            {!gameStarted && (
-                <div className="typing-indicator2">
-                    <div className="dot"></div>
-                    <div className="dot"></div>
-                    <div className="dot"></div>
+                <div className="roomcode">
+                    Room Code: {roomCode}
                 </div>
-            )}
-            {currentPlayer !== playerRole && currentPlayer === 'player2' && (
-                <div className="typing-indicator2">
-                    <div className="dot"></div>
-                    <div className="dot"></div>
-                    <div className="dot"></div>
-                </div>
-            )}
-            {currentPlayer !== playerRole && currentPlayer === 'player1' && (
-                <div className="typing-indicator2">
-                    <div className="dot"></div>
-                    <div className="dot"></div>
-                    <div className="dot"></div>
-                </div>
-            )}
-            <div className="game-board">
-                <div className="grid">
-                    {renderGrid(handleGridCellClick, gridCells, selectedCup)}
-                </div>
-            </div>
-            {playerRole === 'player1' && (
-                <div className="playerstacks">
-                    {/* Player 1's Stacks */}
-                    <div className="player1stack">
-                        {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
-                    </div>
-                    <div className="player1stack1">
-                        {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
-                    </div>
-                    <div className="player1stack2">
-                        {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
+                {winner && (
+                    <WinnerOverlay winner={winner} onReset={onReturnToLanding} />
+                )}
+                {!gameStarted && (
+                    <div className="waiting-message">
+                        Waiting for opponent...
                     </div>
 
-                    {/* Player 2's Stacks */}
-                    <div className="player2stack">
-                        {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
+                )}
+                {!gameStarted && (
+                    <div className="typing-indicator2">
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
                     </div>
-                    <div className="player2stack1">
-                        {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
+                )}
+                {currentPlayer !== playerRole && currentPlayer === 'player2' && (
+                    <div className="typing-indicator2">
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
                     </div>
-                    <div className="player2stack2">
-                        {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
+                )}
+                {currentPlayer !== playerRole && currentPlayer === 'player1' && (
+                    <div className="typing-indicator2">
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                    </div>
+                )}
+                <div className="game-board">
+                    <div className="grid">
+                        {renderGrid(handleGridCellClick, gridCells, selectedCup)}
                     </div>
                 </div>
-            )}
-            {playerRole === 'player2' && (
-                <div className="playerstacks">
-                    {/* Player 1's Stacks */}
-                    <div className="oplayer1stack">
-                        {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
-                    </div>
-                    <div className="oplayer1stack1">
-                        {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
-                    </div>
-                    <div className="oplayer1stack2">
-                        {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
-                    </div>
+                {playerRole === 'player1' && (
+                    <div className="playerstacks">
+                        {/* Player 1's Stacks */}
+                        <div className="player1stack">
+                            {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
+                        </div>
+                        <div className="player1stack1">
+                            {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
+                        </div>
+                        <div className="player1stack2">
+                            {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
+                        </div>
 
-                    {/* Player 2's Stacks */}
-                    <div className="oplayer2stack">
-                        {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
+                        {/* Player 2's Stacks */}
+                        <div className="player2stack">
+                            {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
+                        </div>
+                        <div className="player2stack1">
+                            {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
+                        </div>
+                        <div className="player2stack2">
+                            {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
+                        </div>
                     </div>
-                    <div className="oplayer2stack1">
-                        {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
+                )}
+                {playerRole === 'player2' && (
+                    <div className="playerstacks">
+                        {/* Player 1's Stacks */}
+                        <div className="oplayer1stack">
+                            {renderCupStack(4, 1, 1, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 1 */}
+                        </div>
+                        <div className="oplayer1stack1">
+                            {renderCupStack(4, 1, 2, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 2 */}
+                        </div>
+                        <div className="oplayer1stack2">
+                            {renderCupStack(4, 1, 3, handleCupClick, selectedCup, gridCells)} {/* Player 1, Stack 3 */}
+                        </div>
+
+                        {/* Player 2's Stacks */}
+                        <div className="oplayer2stack">
+                            {renderCupStack(4, 2, 1, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 1 */}
+                        </div>
+                        <div className="oplayer2stack1">
+                            {renderCupStack(4, 2, 2, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 2 */}
+                        </div>
+                        <div className="oplayer2stack2">
+                            {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
+                        </div>
                     </div>
-                    <div className="oplayer2stack2">
-                        {renderCupStack(4, 2, 3, handleCupClick, selectedCup, gridCells)} {/* Player 2, Stack 3 */}
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 };
@@ -287,7 +289,7 @@ const OpponentStatusIndicator = ({ isConnected }) => (
 );
 
 OpponentStatusIndicator.propTypes = {
-    isConnected: PropTypes.string.isRequired,
+    isConnected: PropTypes.bool.isRequired,
 };
 
 GameBoard.propTypes = {
