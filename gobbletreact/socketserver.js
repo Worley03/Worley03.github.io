@@ -47,9 +47,11 @@ const io = new socketIo.Server(httpServer, {
 
 io.on('connection', (socket) => {
     if (socket.recovered) {
-        console.log(`User with socket ID ${socket.id} reconnected`);
-        // recovery was successful: socket.id, socket.rooms and socket.data were restored
+        console.log(`User with socket ID ${socket.id} reconnected to ${socket.rooms}`);
+        socket.to(socket.rooms).emit('opponentConnected');
+        // check for recovery, if recovery was successful: socket.id, socket.rooms and socket.data were restored
     } else {
+        // run initial room join fuctions
         console.log(`User with socket ID ${socket.id} connected`);
         socket.on('checkRoom', (room, callback) => {
             const roomSize = io.sockets.adapter.rooms.get(room)?.size || 0;
