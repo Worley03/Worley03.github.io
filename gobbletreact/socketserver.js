@@ -19,6 +19,7 @@ function resetInactivityTimer(roomId) {
     // Clear existing timer
     if (roomStates[roomId]?.timeoutId) {
         clearTimeout(roomStates[roomId].timeoutId);
+        console.log(`Room ${roomId} inactivity timer has been reset.`);
     }
 
     // Set a new timer
@@ -88,7 +89,7 @@ io.on('connection', (socket) => {
             });
         }
         resetInactivityTimer(data.room);  // Reset inactivity timer
-        console.log(`${data}`);
+        console.log(`Room ${data.room}, ${data.newGridCells}`);
     });
 
     socket.on('leaveRoom', (room) => {

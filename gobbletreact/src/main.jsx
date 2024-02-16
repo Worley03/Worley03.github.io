@@ -4,6 +4,7 @@ import Landing from './Landing.jsx';
 import LocalMultiplayer from './local.jsx'; // Import your LocalMultiplayer component
 import OnlineMultiplayer from './online.jsx'; // Import your OnlineMultiplayer component
 
+// eslint-disable-next-line react-refresh/only-export-components
 const RootComponent = () => {
     const [currentPage, setCurrentPage] = useState('landing');
     const [roomCode, setRoomCode] = useState(''); // State to store room code
