@@ -40,9 +40,6 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
     useEffect(() => {
         const handleRoleAssigned = (role) => {
             setPlayerRole(role);
-            if (role === 'player1') {
-                setCurrentPlayer('player1');
-            }
         };
 
         const handleGameStart = () => {
