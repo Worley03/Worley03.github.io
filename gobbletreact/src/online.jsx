@@ -108,7 +108,7 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                             setGridCells(newGridCells);
                             //emit for SOCKET.io
                             setSelectedCup({ id: null, isSelected: false });
-                            //switchTurn();
+                            switchTurn();
                             const moveData = {
                                 room: roomCode, // Use the room code from props
                                 cellIndex: cellIndex,
@@ -137,7 +137,7 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                         setGridCells(newGridCells);
                         //emit for SOCKET.io
                         setSelectedCup({ id: null, isSelected: false });
-                        //switchTurn();
+                        switchTurn();
                         const moveData = {
                             room: roomCode, // Use the room code from props
                             cellIndex: cellIndex,
@@ -158,6 +158,10 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
         }
     };
 
+    const switchTurn = () => {
+        setCurrentPlayer(currentPlayer === 'player1' ? 'player2' : 'player1');
+
+    };
 
     useEffect(() => {
         const handleLeaveRoom = () => {
