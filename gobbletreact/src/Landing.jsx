@@ -4,7 +4,6 @@ import Logo from './assets/gobblet.png'; // Adjust the path as necessary
 import socket from './socket.js';
 import PropTypes from 'prop-types';
 
-const SERVER_URL = 'https://gobblet-express-backend.onrender.com'; // Your server URL
 const POLL_INTERVAL = 5000; // Interval to poll server status in milliseconds
 
 const Landing = ({ onLocalMultiplayer, onOnlineMultiplayer }) => {
@@ -15,15 +14,19 @@ const Landing = ({ onLocalMultiplayer, onOnlineMultiplayer }) => {
     useEffect(() => {
         const checkServerStatus = async () => {
             try {
-                const response = await fetch(SERVER_URL, { method: 'HEAD' });
-                console.log(response);
-                if (response.ok || response.status === 404) {
-                    setServerStatus('Online');
+                const response = await fetch('https://gobblet-express-backend.onrender.com/status');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.status === 'Server is running') {
+                        setServerStatus('Server Online');
+                    } else {
+                        setServerStatus('Server Offline');
+                    }
                 } else {
                     setServerStatus('Server Offline');
                 }
             } catch (error) {
-                setServerStatus('Server Offline');
+                setServerStatus('Server Spinning Up...');
             }
         };
 

@@ -34,6 +34,10 @@ html, body {
 }
 
 .server-status.checking {
+    color: rgb(0, 0, 0);
+}
+
+.server-status.spinning {
     color: orange;
 }
 
