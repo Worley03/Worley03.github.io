@@ -19,6 +19,25 @@ html, body {
     /* other styles */
 }
 
+
+.server-status {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.server-status.online {
+    color: green;
+}
+
+.server-status.offline {
+    color: red;
+}
+
+.server-status.checking {
+    color: orange;
+}
+
+
 input {
     font-size: 20px; /* Sets the font size to 20 pixels */
     width: 75vw;
