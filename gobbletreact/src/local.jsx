@@ -137,6 +137,9 @@ const GameBoard = ({ onReturnToLanding }) => {
                     </div>
                 </div>
             </div>
+            <button className="refresh-button" onClick={() => window.location.reload()}>
+                    Home
+                </button>
         </div>
     );
 };
