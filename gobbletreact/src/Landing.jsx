@@ -8,25 +8,21 @@ const POLL_INTERVAL = 5000; // Interval to poll server status in milliseconds
 
 const Landing = ({ onLocalMultiplayer, onOnlineMultiplayer }) => {
     const [roomCode, setRoomCode] = useState('');
-    const [serverStatus, setServerStatus] = useState('Checking Server...'); // Default status
+    const [serverStatus, setServerStatus] = useState('Server Spinning Up...'); // Default status
     const rulesPdfUrl = 'https://www.boardspace.net/gobblet/english/gobblet_rules.pdf'; // Replace with your actual URL
 
     useEffect(() => {
         const checkServerStatus = async () => {
             try {
-                const response = await fetch('https://gobblet-express-backend.onrender.com/status');
+                const response = await fetch('https://gobblet-express-backend.onrender.com/status', { method: 'GET' });
+
                 if (response.ok) {
-                    const data = await response.json();
-                    if (data.status === 'Server is running') {
-                        setServerStatus('Server Online');
-                    } else {
-                        setServerStatus('Server Offline');
-                    }
+                    setServerStatus('Server Online');
                 } else {
-                    setServerStatus('Server Offline');
+                    setServerStatus('Server Spinning Up...');
                 }
             } catch (error) {
-                setServerStatus('Server Spinning Up...');
+                setServerStatus('Server Offline');
             }
         };
 
