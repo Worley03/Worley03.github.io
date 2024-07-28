@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './App.css';
+import homeIcon from './assets/home.png'; // Import the image
+
 
 const GameBoard = ({ onReturnToLanding }) => {
     const [selectedCup, setSelectedCup] = useState({ id: null, isSelected: false });
@@ -138,7 +140,7 @@ const GameBoard = ({ onReturnToLanding }) => {
                 </div>
             </div>
             <button className="refresh-button" onClick={() => window.location.reload()}>
-            <img src="/home.png" alt="Home" className="home-icon" />                
+            <img src={homeIcon} alt="Home" className="home-icon" />                
             </button>
         </div>
     );
