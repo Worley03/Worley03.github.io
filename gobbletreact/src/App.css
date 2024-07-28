@@ -105,17 +105,17 @@ html, body {
     right: 10px;
     background-color: transparent;
     border: none;
-    color: grey;
-    font-size: 20px;
     cursor: pointer;
+    padding: 0;
 }
 
-.refresh-button i {
-    font-size: 20px;
+.refresh-button .home-icon {
+    width: 24px;
+    height: 24px;
 }
 
-.refresh-button:hover {
-    color: darkgrey;
+.refresh-button:hover .home-icon {
+    opacity: 0.7;
 }
 
 .player1-indicator {

@@ -270,8 +270,7 @@ const GameBoard = ({ roomCode, onReturnToLanding }) => {
                     </div>
                 )}
                  <button className="refresh-button" onClick={() => window.location.reload()}>
-                    Home
-                </button>
+                 <img src="/home-icon.png" alt="Home" className="home-icon" />                </button>
             </div>
         </div>
     );
